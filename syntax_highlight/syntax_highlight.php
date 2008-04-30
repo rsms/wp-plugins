@@ -50,7 +50,7 @@ function &hu_syntax_highlight($content, $lang, $cache_ttl=30) {
 function &hu_syntax_highlight_filter($content='') {
   $start = 0;
   while(1) {
-    if( ($start = strpos($content, "\n{{{", $start)) !== false) {
+    if( ($start = strpos($content, ($start == 0 ? '{{{' : "\n{{{"), $start)) !== false) {
       if( ($end = strpos($content, "\n}}}", $start+5)) !== false) {
         $code = trim(substr($content, $start+4, $end-($start+4)));
         $lang = null;
@@ -87,8 +87,8 @@ function &hu_syntax_highlight_filter_unwrap($content='') {
       $len = intval(substr($content, $start+4, 10));
       $content = substr($content, 0, $start)
         . base64_decode(substr($content, $start+14, $len))
-        . substr($content, $start+20+$len);
-      $start = $start + 20;
+        . substr($content, $start+14+$len);
+      $start = $start + 14;
       if($start > $content_len)
         break;
     }
