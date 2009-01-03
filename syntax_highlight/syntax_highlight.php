@@ -51,7 +51,7 @@ function &hu_syntax_highlight_filter($content='') {
   $start = 0;
   while(1) {
     if( ($start = strpos($content, ($start == 0 ? '{{{' : "\n{{{"), $start)) !== false) {
-      if( ($end = strpos($content, "\n}}}", $start+5)) !== false) {
+      if( ($end = strpos($content, "}}}", $start+5)) !== false) {
         $code = trim(substr($content, $start+4, $end-($start+4)));
         $lang = null;
         if( substr($code, 0, 2) == '#!' ) {
@@ -60,12 +60,12 @@ function &hu_syntax_highlight_filter($content='') {
           $code = hu_syntax_highlight(ltrim(substr($code, $nl+1), "\r"), $lang);
         }
         else {
-          $code = '<div class="sourcecode"><pre>'.$code.'</pre></div>';
+          $code = '<div class="sourcecode"><pre>'.htmlentities($code).'</pre></div>';
         }
         $code_wrapped = base64_encode($code);
         $content = substr($content, 0, $start)
           . sprintf("{{{!%010d%s",strlen($code_wrapped), $code_wrapped)
-          . substr($content, $end+4);
+          . substr($content, $end+3);
         $start = $end;
       }
       else {
